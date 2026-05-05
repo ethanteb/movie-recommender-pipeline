@@ -1,15 +1,13 @@
 class Pipeline:
-    #pipeline class bringing together loading, preprocessing, modelling, and evaluation steps
-    def __init__(self, loader, preprocessor, model, evaluator):
+    #pipeline class bringing together loading, preprocessing, and modeling steps
+    def __init__(self, loader, preprocessor, model):
         self.loader = loader
         self.preprocessor = preprocessor
         self.model = model
-        self.evaluator = evaluator
 
-    def run(self):
+    def run(self, movie_title: str):
         df = self.loader.load()
-        X_train, X_test, y_train, y_test = self.preprocessor.split(df)
-        self.model.train(X_train, y_train)
-        predictions = self.model.predict(X_test)
-        results = self.evaluator.evaluate(y_test, predictions)
-        return results
+        df = self.preprocessor.transform(df)
+        self.model.fit(df, text_column="genre")
+        recommendations = self.model.recommend(movie_title, top_n=5)
+        return recommendations
