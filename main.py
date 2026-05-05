@@ -4,15 +4,19 @@ from src.models.recommender import MovieRecommender
 from src.pipeline.pipeline import Pipeline
 
 def main():
-    loader = DataLoader("data/movies.csv")
-    preprocessor = Preprocessor(text_column="genre")
+    loader = DataLoader("data/simple_movie_data.csv")
+    preprocessor = Preprocessor(target_column="genre")
     recommender = MovieRecommender()
+
     pipeline = Pipeline(loader, preprocessor, recommender)
-    movie = "The Dark Knight"
-    recommendations = pipeline.run(movie)
-    print(f"Recommendations for {movie}:")
-    for rec in recommendations:
-        print("-", rec)
+
+    movie_title = input("Enter a movie title: ")
+
+    recommendations = pipeline.run(movie_title)
+
+    print(f"\nTop recommendations for '{movie_title}':\n")
+    for title, score in recommendations:
+        print(f"- {title} (similarity: {score:.3f})")
 
 if __name__ == "__main__":
     main()
