@@ -1,4 +1,5 @@
 from sklearn.metrics import accuracy_score
+import pandas as pd
 
 class Evaluator:
     #class to evaluate the performance of the model using accuracy score metric
