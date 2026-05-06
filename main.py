@@ -5,9 +5,8 @@ from src.pipeline.pipeline import Pipeline
 
 def main():
     loader = DataLoader("data/simple_movie_data.csv")
-    preprocessor = Preprocessor(target_column="genre")
+    preprocessor = Preprocessor()
     recommender = MovieRecommender()
-
     pipeline = Pipeline(loader, preprocessor, recommender)
 
     movie_title = input("Enter a movie title: ")
@@ -17,6 +16,7 @@ def main():
     print(f"\nTop recommendations for '{movie_title}':\n")
     for title, score in recommendations:
         print(f"- {title} (similarity: {score:.3f})")
+
 
 if __name__ == "__main__":
     main()
