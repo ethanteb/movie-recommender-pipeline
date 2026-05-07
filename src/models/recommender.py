@@ -1,9 +1,16 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 class MovieRecommender:
     def __init__(self):
-        self.vectorizer = TfidfVectorizer(stop_words="english")
+        self.vectorizer = TfidfVectorizer(
+            stop_words="english",
+            ngram_range=(1, 2),
+            min_df=2,
+            max_df=0.8,
+            sublinear_tf=True
+        ) 
         self.tfidf_matrix = None
         self.movies = None
         self.text_column = None
@@ -37,12 +44,17 @@ class MovieRecommender:
 
         similarity_scores = list(enumerate(similarity_scores))
         similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+        scores = np.array([score for _, score in similarity_scores])
 
-        top_movies = similarity_scores[1:top_n + 1]
+        overall_score = (
+            self.movies["normalized_ratings"] * 0.25 + scores * 0.75
+        )
+
+        top_movies = overall_score.sort_values(ascending=False).iloc[1:top_n + 1]
 
         results = [
             (self.movies["movie_title"].iloc[i], score)
-            for i, score in top_movies
+            for i, score in top_movies.items()
         ]
 
         return results

@@ -15,7 +15,7 @@ def main():
 
     print(f"\nTop recommendations for '{movie_title}':\n")
     for title, score in recommendations:
-        print(f"- {title} (similarity: {score:.3f})")
+        print(f"- {title} (score: {score:.3f})")
 
 
 if __name__ == "__main__":
